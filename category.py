@@ -23,7 +23,7 @@ def show_products():
 
 def menu():
     print("""                                  
-            |    Olist Shops - Categoria       |
+            |    Olist Shops                   |
             |                                  |
             |                                  |
             | 1 - Nova Categoria               |

@@ -4,8 +4,10 @@ products = {}
 
 def show_categories():
     if DADOS:
-        print(DADOS)
-        print("------------------------------")
+        arquivo = open('dados.txt', 'r')
+        for linha in arquivo:
+            print(linha)
+        arquivo.close()
     else:
         print("Categoria Vazia!")
 
@@ -21,7 +23,7 @@ def show_products():
 def save():
     with open('dados.txt', 'a') as a:
         for category in DADOS:
-            a.write(str(category))
+            a.write(str(category) + '\n')
 
 
 def menu():
