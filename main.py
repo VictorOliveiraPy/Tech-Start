@@ -26,7 +26,7 @@ def menu():
             | 1 - Nova Categoria               |
             | 2 - Lista Categoria              |
             | 3 - Criar Produto  
-            | 4 - Lista Produtos
+            | 4 - Lista Produtos               |
             | 0 - Sair do Programa             |
     """
           )
