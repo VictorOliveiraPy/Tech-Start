@@ -13,10 +13,12 @@ def show_categories():
 
 
 def show_products():
-    if products:
-        print(products)
-        print("------------------------------")
-    else:
+    if DADOS:
+        arquivo = open('product.txt', 'r')
+        for linha in arquivo:
+            print(linha)
+        arquivo.close()
+    else:   
         print("Produto Vazio!")
 
 
@@ -24,6 +26,12 @@ def save():
     with open('dados.txt', 'a') as a:
         for category in DADOS:
             a.write(str(category) + '\n')
+
+
+def save_products():
+    with open('product.txt','a') as ex:
+        for product in DADOS:
+            ex.write(str(product) + '\n')            
 
 
 def menu():
@@ -52,12 +60,13 @@ while True:
     elif opcao == "2":
         show_categories()
     elif opcao == "3":
-        products['name'] = str(input("Digite o produto a ser cadastrado :"))
-        products['description'] = str(input("Descreva o produto :"))
-        products['value'] = float(input("Valor R$ :"))
+        DADOS.append({"name": input('Produto: ')})
+        DADOS.append({"description": input('Descricao: ')})
+        DADOS.append({"value": input('Valor:')})
+        save_products()
     elif opcao == '4':
         show_products()
-
+    
         print("------------------------------------------------------------------------------")
 
     elif opcao == '0':
