@@ -1,8 +1,5 @@
-
-import products
-from products import crete_products
-
 Dados = {}
+products = {}
 
 
 def show_categories():
@@ -46,9 +43,11 @@ while True:
     elif opcao == "2":
         show_categories()
     elif opcao == "3":
-        crete_products()
+        products['name'] = str(input("Digite o produto a ser cadastrado :"))
+        products['description'] = str(input("Descreva o produto :"))
+        products['value'] = float(input("Valor R$ :"))
     elif opcao == '4':
-        products.list_product()
+        show_products()
 
         print("------------------------------------------------------------------------------")
 
