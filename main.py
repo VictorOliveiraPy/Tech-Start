@@ -1,10 +1,10 @@
-Dados = {}
+DADOS = list()
 products = {}
 
 
 def show_categories():
-    if Dados:
-        print(Dados)
+    if DADOS:
+        print(DADOS)
         print("------------------------------")
     else:
         print("Categoria Vazia!")
@@ -16,6 +16,12 @@ def show_products():
         print("------------------------------")
     else:
         print("Produto Vazio!")
+
+
+def save():
+    with open('dados.txt', 'a') as a:
+        for category in DADOS:
+            a.write(str(category))
 
 
 def menu():
@@ -38,8 +44,9 @@ while True:
     menu()
     opcao = input("Escolha uma opção: ")
     if opcao == "1":
-        Dados['name'] = str(input('Categoria: '))
-        Dados['description'] = str(input('Descrição: '))
+        DADOS.append({"name": input('Categoria: ')})
+        DADOS.append({"descricao": input('Descricao: ')})
+        save()
     elif opcao == "2":
         show_categories()
     elif opcao == "3":
