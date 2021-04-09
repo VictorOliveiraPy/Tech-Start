@@ -1,43 +1,23 @@
-from database import Database as db
+from database import Database
 
+
+db = Database()
 Categorias = list()
 Produtos = list()
 
 
 def show_categories():
-    if DADOS:
-        arquivo = open('dados.txt', 'r')
-        for linha in arquivo:
-            print(linha)
-        arquivo.close()
-    else:
-        print("Categoria Vazia!")
-
+    categories = db.cursor.execute('SELECT * FROM categorias').fetchall()
+    [print(data) for data in categories]
+        
 
 def show_products():
-    if products:
-        arquivo = open('product.txt', 'r')
-        for linha in arquivo:
-            print(linha)
-        arquivo.close()
-    else:
-        print("Produto Vazio!")
-
-
-def save_categories():
-    print(Categorias)
-    db().cursor.execute(f"""
-    INSERT INTO categorias
-    VALUES ({Categorias[0]['name']},{Categorias[1]['descricao']})
-    """)
-    db().commit()
-
-
-
-def save_products():
-    with open('product.txt', 'a') as ex:
-        for product in DADOS:
-            ex.write(str(product) + '\n')
+    produtos = db.cursor.execute('''
+    SELECT * FROM produtos
+    JOIN produto_categoria ON produtos.id = produto_categoria.produto_id
+    JOIN categorias ON categoria_id = produto_categoria.categoria_id
+    ''').fetchall()
+    [print(data) for data in produtos]
 
 
 def menu():
@@ -54,71 +34,41 @@ def menu():
           )
 
 
-def criar_database():
-    try:
-        db().cursor.execute(
-        '''
-        CREATE TABLE produtos(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome VARCHAR(100) NOT NULL,
-        descricao VARCHAR(200) NOT NULL,
-        valor FLOAT NOT NULL);'''
-        )
-
-        db().cursor.execute(
-        '''
-        CREATE TABLE produto_categoria(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            produto_id INTEGER,
-            categoria_id INTEGER,
-            FOREIGN KEY(produto_id) REFERENCES produtos(id),
-            FOREIGN KEY(categoria_id) REFERENCES categorias(id)
-        );
-        '''
-        )
-
-        db().cursor.execute(
-        '''
-        CREATE TABLE categorias(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome VARCHAR(100) NOT NULL,
-        descricao VARCHAR(100) NOT NULL
-        );'''
-        )
-    except:
-        pass
 
 
 # EXECUÇÃO DO PROGRAMA
 
-criar_database()
 
 while True:
     menu()
     opcao = input("Escolha uma opção: ")
     if opcao == "1":
-        db().cursor.execute(f"""
-        INSERT INTO categorias (nome, descricao)
-        VALUES ({input('Categoria: ')},{input('Descricao: ')})
-        """)
-        # Categorias.append({"name": input('Categoria: ')})
-        # Categorias.append({"descricao": input('Descricao: ')})
-        # save_categories()
+        db.cursor.execute(f"""
+        INSERT INTO categorias
+        VALUES (?,?,?)
+        """, (None, input('Categoria: '), input('Descricao: ')))
+        db.commit()
     elif opcao == "2":
         show_categories()
     elif opcao == "3":
-        Produtos.append({"name": input('Produto: ')})
-        Produtos.append({"description": input('Descricao: ')})
-        Produtos.append({"value": input('Valor:')})
-        save_products()
+        db.cursor.execute("""
+            INSERT INTO produtos
+            VALUES (?,?,?,?)
+        """, (None, input('Nome: '), input('Descrição: '), input('Valor: ')))
+        produto_id = db.cursor.execute('SELECT id FROM produtos WHERE ID = (SELECT MAX (id) FROM produtos)').fetchall()
+        db.cursor.execute('''
+            INSERT INTO produto_categoria
+            VALUES (?,?)
+        ''', (produto_id[0][0], int(input('Digite o Id da categoria: ')))
+        )
+        db.commit()
     elif opcao == '4':
-        a = db().cursor.execute('SELECT * FROM categorias')
-        print(a.fetchall())
-        # show_products()
+        show_products()
 
         print("------------------------------------------------------------------------------")
 
     elif opcao == '0':
+        db.close()
         break
     else:
         print("Opção Inválida!")
