@@ -13,12 +13,12 @@ def show_categories():
 
 
 def show_products():
-    if DADOS:
+    if products:
         arquivo = open('product.txt', 'r')
         for linha in arquivo:
             print(linha)
         arquivo.close()
-    else:   
+    else:
         print("Produto Vazio!")
 
 
@@ -29,14 +29,14 @@ def save():
 
 
 def save_products():
-    with open('product.txt','a') as ex:
+    with open('product.txt', 'a') as ex:
         for product in DADOS:
-            ex.write(str(product) + '\n')            
+            ex.write(str(product) + '\n')
 
 
 def menu():
     print("""                                  
-            |    Olist Shops - Categoria       |
+            |    Olist Shops - Menu            |
             |                                  |
             |                                  |
             | 1 - Nova Categoria               |
@@ -66,7 +66,7 @@ while True:
         save_products()
     elif opcao == '4':
         show_products()
-    
+
         print("------------------------------------------------------------------------------")
 
     elif opcao == '0':
